@@ -84,3 +84,52 @@ def test_capacity_zero_all_waitlisted_and_promotion_never_happens():
 #################################################################################
 # Add your own additional tests here to cover more cases and edge cases as needed.
 #################################################################################
+def test_status_returns_registered_waitlisted_and_none():
+    # Validates: C4
+    er = EventRegistration(capacity=1)
+    er.register("u1")
+    er.register("u2")
+
+    assert er.status("u1") == UserStatus("registered")
+    assert er.status("u2") == UserStatus("waitlisted", 1)
+    assert er.status("u3") == UserStatus("none")
+
+def test_cancel_registered_when_waitlist_empty():
+    # Validates: C1, C6
+    er = EventRegistration(capacity=2)
+    er.register("u1")
+    er.register("u2")
+
+    er.cancel("u1")
+
+    assert er.status("u1") == UserStatus("none")
+    assert er.status("u2") == UserStatus("registered")
+
+    snap = er.snapshot()
+    assert snap["registered"] == ["u2"]
+    assert snap["waitlist"] == []
+
+def test_reregister_after_cancel():
+    # Validates: C3, C6
+    er = EventRegistration(capacity=1)
+    er.register("u1")
+    er.cancel("u1")
+
+    assert er.status("u1") == UserStatus("none")
+
+    s = er.register("u1")
+    assert s == UserStatus("registered")
+    assert er.status("u1") == UserStatus("registered")
+
+def test_cancel_unknown_user_raises_notfound():
+    # Validates: C6
+    er = EventRegistration(capacity=1)
+    er.register("u1")
+
+    with pytest.raises(NotFound):
+        er.cancel("missing_user")
+
+def test_negative_capacity_raises_value_error():
+    # Validates: C1
+    with pytest.raises(ValueError):
+        EventRegistration(-1)

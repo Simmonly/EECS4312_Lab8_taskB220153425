@@ -1,0 +1,99 @@
+## 1. Problem Understanding - Describe the problem your system solves.
+System purpose: The purpose of the system is to manage user registrations for an event with a limited capacity, and automatically maintain a waitlist if the event is full
+Inputs to the system:
+- Event capacity
+- User registration/cancellation requests
+- User ID
+- User status query
+- Sequential operaiton execution order
+Outputs produced by the system:
+- Updated registration user list
+- Updated waitlsit
+- User status upon query
+- Explicit feedback if the system is reject or succeded
+Primary goal of the system:
+To provide a deterministic event registraiton system which automatically manages capacity conflicts. 
+inputs.
+A1:
+A1: Event capacity is provided at system initializaiton
+A2:  Each user ID is unique 
+A3:  Operations are performed sequentially
+A4: Users interact with the system through requests
+A5: The system state is stored in memory during execution
+A6: The waitlist ordering always follows FIFO
+## 2. Assumptions - List assumptions about the environment, users, or
+---
+## 3. Functional Requirements - Describe the main behaviors the system
+must perform.
+FR1: The system shall register users automatically when capacity is available.
+FR2: The system shall place additional users into a FIFO waitlist when capacity is full.
+FR3: The system shall automatically promote the earliest waitlisted user when a registered user cancels. (Derived from Jane – predictable automated decisions)
+FR4: The system shall reject duplicate registrations and provide explicit feedback. (Derived from Mo – need for clarity)
+FR5: The system shall allow users to cancel their registration or waitlist position at any time.
+FR6: The system shall allow users to query their current status and return a deterministic result.
+## 4. System Constraints - Constraints are conditions the system must
+always respect. Each constraint should reference the persona attribute
+it originates from.
+C1: The system must promote waitlisted users using deterministic FIFO ordering.
+Derived from persona attribute: Jane – prefers predictable and stable decisions.
+C2: The system must automatically handle registration conflicts such as full capacity.
+Derived from persona attribute: Jane – trusts system to resolve conflicts.
+C3: The system must avoid duplicate or unnecessary status feedback.
+Derived from persona attribute: Jane – frustration from excessive notifications.
+C4: The system must produce consistent outputs for repeated operation sequences.
+Derived from persona attribute: Mo – requires deterministic behavior.
+C5: The system must provide explicit feedback explaining operation outcomes.
+Derived from persona attribute: Mo – needs clear explanations.
+C6: The system must explicitly handle invalid inputs and must not fail silently.
+Derived from persona attribute: Mo – stress from unpredictable failures.
+Derived from persona attribute:
+---
+## 5. Acceptance Criteria - Acceptance criteria define how system
+behavior will be verified.
+AC1:
+Given a full event and users on the waitlist
+When a registered user cancels
+Then the earliest waitlisted user shall be promoted.
+(Links: C1)
+AC2:
+Given an event at maximum capacity
+When a new user registers
+Then the system shall place the user in the waitlist automatically.
+(Links: C2)
+AC3:
+Given a user submits one registration request
+When the request is processed
+Then the system shall produce exactly one status result.
+(Links: C3)
+AC4:
+Given the same initial state and identical operation sequence
+When operations are repeated
+Then the final system state shall be identical.
+(Links: C4)
+AC5:
+Given a duplicate registration attempt
+When the system processes the request
+Then the system shall reject the request and return explicit feedback.
+(Links: C5, C6)
+AC6:
+Given a cancellation request from a non-existent user
+When the system processes the request
+Then the system shall return explicit failure feedback.
+(Links: C5, C6)
+## 6. Edge Cases - Describe unusual or boundary situations the system
+must handle.
+EC1: Capacity = 0
+Expected system behavior: All users are waitlisted and no promotion occurs.
+EC2: Duplicate registration attempt
+Expected system behavior: The system rejects the request with explicit feedback.
+EC3: Cancellation of a non-existent user
+Expected system behavior: The system reports failure without altering system state.
+Expected system behavior:
+---
+## 7. Traceability - Link functional requirements to constraints and
+FR1 → C2 → AC2
+FR2 → C1 → AC1
+FR3 → C1 → AC1
+FR4 → C5 → AC5
+FR5 → C6 → AC6
+FR6 → C4 → AC4

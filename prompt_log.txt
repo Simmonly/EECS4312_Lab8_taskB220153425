@@ -263,3 +263,23 @@ solution.py
 tests.py
 README.md
 prompt_log.txt}
+
+
+
+
+
+
+--------------------------------------
+Lab 9
+For this one I simply copied all of my answers for all the questionaire questions, and copied the lab report to chatGpt, then ask it the following:
+Prompt 1: Given the specifications for the lab, are there any major issues such as missing constraints, ambiguous requirements or unhandled edge cases from my questionnaire answers?
+Response summary: Yes 👍 — based on your questionnaire answers and requirements so far, there are no major issues.
+Your specification:
+clearly defines the system purpose and behavior
+includes deterministic FIFO rules
+covers duplicate handling and invalid operations
+provides persona-derived constraints
+defines testable acceptance criteria
+identifies relevant edge cases
+maintains traceability between FR → C → AC → tests
+Overall, the requirements are sufficiently precise, consistent, and implementable, and there are no critical missing constraints or ambiguities that would prevent system implementation.
